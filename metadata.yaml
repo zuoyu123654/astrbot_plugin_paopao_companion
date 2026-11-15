@@ -1,0 +1,23 @@
+name: astrbot_plugin_paopao_companion
+display_name: 泡泡陪伴
+short_desc: 桌宠的「眼睛和脑子」控制台：识屏、看番、陪看、直播网课，一条命令开关和体检。
+desc: |-
+  桌宠/桌娘的陪伴能力开关台。
+
+  - 采集与生成跑在独立的本地核心服务里（默认 `http://127.0.0.1:9888`），**不占 AstrBot 进程**；
+    这个插件只是遥控器——查询状态、切模式、体检、试听。
+  - 模式：`auto` / `normal` / `video` / `anime` / `live` / `course` / `off`
+  - 能力：识屏连续性（帧拼图 + 前情）、番剧字幕 OCR、视频字幕、直播/网课音频转写
+  - 装好之后发：`陪伴`、`陪伴 医生`、`陪伴 模式 anime`
+
+  需要配套的本地陪伴核心服务；插件会按配置把它拉起来（可选）。
+version: 0.2.0
+author: paopao
+astrbot_version: ">=4.15.0"
+support_platforms:
+  - aiocqhttp
+tags:
+  - 桌宠
+  - 陪伴
+  - 识屏
+  - 语音
