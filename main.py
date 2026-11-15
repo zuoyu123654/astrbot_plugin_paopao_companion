@@ -14,6 +14,7 @@
     陪伴 说 我在看呢      让她说一句
     陪伴 摘要            立刻整理一次识屏摘要
     陪伴 启动            拉起核心（如果没跑）
+    看看屏幕             让她真的看一眼屏幕（等价 /look）
 """
 
 from __future__ import annotations
@@ -31,7 +32,7 @@ from astrbot.api.event import AstrMessageEvent, filter
 from astrbot.api.star import Context, Star, register
 
 PLUGIN_NAME = "astrbot_plugin_paopao_companion"
-PLUGIN_VERSION = "0.2.0"
+PLUGIN_VERSION = "0.2.1"
 
 DEFAULTS = {
     "gateway_url": "http://127.0.0.1:9888",
@@ -58,6 +59,7 @@ HELP = """陪伴控制台（这个插件只是遥控器）
   陪伴 说 <一句话>     让她立刻说（走本地 TTS）
   陪伴 摘要            立刻整理一次识屏摘要
   陪伴 启动            拉起核心服务（需先配 start_script）
+  看看屏幕             让她看一眼（识屏计数会涨）
 """
 
 
@@ -127,6 +129,33 @@ class PaopaoCompanionPlugin(Star):
         logger.warning("[陪伴] 核心 20 秒内没起来")
 
     # ── 命令 ───────────────────────────────────────────────────
+    # 「看一眼屏幕」的各种说法，都走同一个动作。
+    # 用 regex 过滤器（它不受唤醒前缀限制，走 re.search），比死记三个命令自然得多。
+    LOOK_RE = (
+        r"(?:你|您|泡泡|老大)?\s*"
+        r"(?:帮我|给我|替我|麻烦你?|能不能|可以)?\s*"
+        r"(?:看|瞧|瞅|瞄|盯)(?:一看|一下|一眼|看|下|看下)?\s*"
+        r"(?:我的|我|这|当前|现在的|屏幕上)?\s*"
+        r"(?:屏幕|桌面|画面|显示器)"
+        r"|"
+        r"(?:屏幕|桌面|画面)(?:上)?\s*(?:是|有|显示|出现)什么"
+        r"|"
+        r"(?:look at|check)\s+(?:my\s+)?screen"
+    )
+
+    @filter.regex(LOOK_RE)
+    async def cmd_look(self, event: AstrMessageEvent):
+        yield event.plain_result(await self._look())
+
+    async def _look(self) -> str:
+        try:
+            r = await self._request("/look", {})
+        except Exception as exc:  # noqa: BLE001
+            return "❌ 看不了（%s）\n核心没跑？发「陪伴 启动」试试。" % exc
+        if r.get("ok"):
+            return "👀 看过了（识屏计数 %s → %s）" % (r.get("vision_before"), r.get("vision_after"))
+        return "❌ 按了，但她没看：%s" % (r.get("reason") or "未知原因")
+
     @filter.command("陪伴")
     async def cmd_companion(self, event: AstrMessageEvent):
         raw = (event.message_str or "").strip()
