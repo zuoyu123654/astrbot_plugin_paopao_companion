@@ -1,0 +1,24 @@
+{
+  "gateway_url": {
+    "type": "string",
+    "description": "陪伴核心服务地址",
+    "default": "http://127.0.0.1:9888",
+    "hint": "改端口时这里和核心服务的监听端口要一起改"
+  },
+  "start_script": {
+    "type": "string",
+    "description": "核心启动脚本（可选，留空则不自动启动）",
+    "default": "",
+    "hint": "填一个本机已存在的启动脚本路径；Windows 用 .ps1，类 Unix 用 .sh"
+  },
+  "auto_start": {
+    "type": "bool",
+    "description": "插件加载时自动拉起核心（需要先配 start_script）",
+    "default": false
+  },
+  "timeout_seconds": {
+    "type": "float",
+    "description": "请求超时（秒）",
+    "default": 12
+  }
+}
