@@ -1,4 +1,4 @@
-name: astrbot_plugin_paopao_companion
+﻿name: astrbot_plugin_paopao_companion
 display_name: 泡泡陪伴
 short_desc: 桌宠的「眼睛和脑子」控制台：识屏、看番、陪看、直播网课，一条命令开关和体检。
 desc: |-
@@ -11,6 +11,7 @@ desc: |-
   - 装好之后发：`陪伴`、`陪伴 医生`、`陪伴 模式 anime`
 
   需要配套的本地陪伴核心服务；插件会按配置把它拉起来（可选）。
+repo: https://github.com/zuoyu123654/astrbot_plugin_paopao_companion
 version: 0.2.1
 author: paopao
 astrbot_version: ">=4.15.0"
