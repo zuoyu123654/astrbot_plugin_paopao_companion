@@ -280,10 +280,11 @@ class PaopaoCompanionPlugin(Star):
     async def _host(self, rest: str, speak: bool = False) -> str:
         """直播弹幕：不带参数看状态，带开/关就切（跟托盘勾选等价，写回 config.json）。"""
         what = "回弹幕出声" if speak else "直播弹幕"
+        cmd = "弹幕出声" if speak else "弹幕"
         arg = (rest or "").strip()
         on = self._switch_word(arg)
         if on is None and arg not in ("", "状态", "status"):
-            return "用法：陪伴 %s 开 / 陪伴 %s 关（不带参数=看状态）" % (what, what)
+            return "用法：陪伴 %s 开 / 陪伴 %s 关（不带参数=看状态）" % (cmd, cmd)
         body: dict[str, Any] = {"persist": True}
         if on is not None:
             body["speak" if speak else "enabled"] = on
